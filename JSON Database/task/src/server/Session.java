@@ -35,7 +35,7 @@ public class Session extends Thread {
 
             String msg = input.readUTF();
             Gson gson = new GsonBuilder().create();
-            gson.toJson(msg,System.out);
+            //gson.toJson(msg,System.out);
             JCommand_Json args = gson.fromJson(msg,JCommand_Json.class);
 
             //System.out.println("Received: " + msg);

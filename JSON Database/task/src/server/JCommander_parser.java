@@ -4,7 +4,7 @@ import com.beust.jcommander.Parameter;
 
 public class JCommander_parser
 {
-    @Parameter(names = {"-t"}, description = "type")
+    @Parameter(names = "-t", description = "type")
     public String type;
 
     @Parameter(names = "-k", description = "key")
