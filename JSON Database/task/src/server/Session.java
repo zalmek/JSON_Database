@@ -1,12 +1,12 @@
 package server;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.google.gson.*;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Objects;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -36,26 +36,26 @@ public class Session extends Thread {
             String msg = input.readUTF();
             Gson gson = new GsonBuilder().create();
             //gson.toJson(msg,System.out);
-            JCommand_Json args = gson.fromJson(msg,JCommand_Json.class);
+            JsonObject map = JsonParser.parseString(msg).getAsJsonObject();
 
             //System.out.println("Received: " + msg);
-            if (args.type.equals("get")) {
+            if (Objects.equals(map.get("type").getAsString(), "get")) {
                 readLock.lock();
-                String information = jsonDatabase.menu("get", args.key.toString());
+                String information = jsonDatabase.menu("get", map.get("key"));
                 readLock.unlock();
                 output.writeUTF(information);
-            } else if (args.type.equals("set")) {
+            } else if (Objects.equals(map.get("type").getAsString(), "set")) {
                 writeLock.lock();
-                String information = jsonDatabase.menu("set", args.key.toString(), args.value.toString());
+                String information = jsonDatabase.menu("set", map.get("key"), map.get("value"));
                 writeLock.unlock();
                 output.writeUTF(information);
-            } else if (args.type.equals("delete")) {
+            } else if (Objects.equals(map.get("type").getAsString(), "delete")) {
                 writeLock.lock();
-                String information = jsonDatabase.menu("delete", args.key.toString());
+                String information = jsonDatabase.menu("delete", map.get("key"));
                 writeLock.unlock();
                 output.writeUTF(information);
-            } else if (args.type.equals("exit")) {
-                String information = jsonDatabase.menu("exit", "-1");
+            } else if (Objects.equals(map.get("type").getAsString(), "exit")) {
+                String information = jsonDatabase.menu("exit", new JsonPrimitive("-1"));
                 output.writeUTF(information);
                 exit_state=true;
             }

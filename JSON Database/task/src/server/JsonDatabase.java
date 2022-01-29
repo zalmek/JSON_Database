@@ -1,23 +1,20 @@
 package server;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.google.gson.*;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Objects;
 
 public class JsonDatabase {
-    HashMap<String, String> database;
+    JsonObject database = new JsonObject();
     Gson gson = new GsonBuilder().create();
 
     public JsonDatabase() {
-        database = new HashMap<>();
     }
 
-    public String menu(String arg, String index) {
+    public String menu(String arg, JsonElement index) {
         switch (arg) {
             case "get":
                 return get(index);
@@ -29,32 +26,103 @@ public class JsonDatabase {
         return "";
     }
 
-    public String menu(String arg, String key, String value) {
+    public String menu(String arg, JsonElement key, JsonElement value) {
         return set(key, value);
     }
 
-    private String set(String key, String value) {
-        database.put(key, value);
+    String set(JsonElement pos, JsonElement value) {
+        JsonObject data = database;
+        if (pos.isJsonArray()) {
+
+            JsonArray path = pos.getAsJsonArray();
+
+            for (int i = 0; i < path.size(); i++) {
+                if (i == path.size() - 1) {
+                    data.add(path.get(i).getAsString(), value);
+                    break;
+                } else if (data.has(path.get(i).getAsString())) {
+                    if (!data.get(path.get(i).getAsString()).isJsonObject()) {
+                        data.add(path.get(i).getAsString(), new JsonObject());
+                    }
+                } else {
+                    data.add(path.get(i).getAsString(), new JsonObject());
+                }
+                data = data.getAsJsonObject(path.get(i).getAsString());
+            }
+        } else {
+            database.add(pos.getAsString(), value);
+        }
+
         writeDatabase();
         return okResponse();
     }
 
-    private String get(String key) {
-        if (!Objects.equals(database.get(key), "") && database.get(key) != null) {
-            return getResponse(database.get(key));
+    private String get(JsonElement pos) {
+        JsonObject data = new Gson().fromJson(database, JsonObject.class);
+        if (pos.isJsonArray()) {
+            JsonArray path = pos.getAsJsonArray();
+            if (path.size() == 1) {
+                if (!data.has(pos.getAsString())) {
+                    return noSuchKeyResponse();
+                } else {
+                    writeDatabase();
+                    return getResponse(data.get(path.get(0).getAsString()).getAsJsonObject());
+                }
+            } else {
+                for (int i = 0; i < path.size(); i++) {
+                    if (data.has(path.get(i).getAsString())) {
+                        if (!data.get(path.get(i).getAsString()).isJsonObject()) {
+                            if (i == path.size() - 1) {
+                                return getResponse(data.get(path.get(i).getAsString()).getAsString());
+                            } else {
+                                return noSuchKeyResponse();
+                            }
+                        } else {
+                            data = data.get(path.get(i).getAsString()).getAsJsonObject();
+                        }
+                    } else {
+                        return noSuchKeyResponse();
+                    }
+                }
+            }
         } else {
-            return noSuchKeyResponse();
+            if (!data.has(pos.getAsString())) {
+                return noSuchKeyResponse();
+            } else {
+                return getResponse(new Gson().toJson(data.get(pos.getAsString())));
+            }
         }
+
+        return noSuchKeyResponse();
     }
 
-    private String delete(String key) {
-        if (database.get(key) == null) {
-            return noSuchKeyResponse();
+    private String delete(JsonElement pos) {
+        JsonObject data = database;
+        if (pos.isJsonArray()) {
+            JsonArray path = pos.getAsJsonArray();
+            for (int i = 0; i < path.size(); i++) {
+                if (!data.has(path.get(i).getAsString())) {
+                    return noSuchKeyResponse();
+                } else if (i == path.size() - 1) {
+                    if (data.has(path.get(i).getAsString())) {
+                        data.remove(path.get(i).getAsString());
+                        break;
+                    }
+                } else if (!data.get(path.get(i).getAsString()).isJsonObject()) {
+                    return noSuchKeyResponse();
+                }
+                data = data.getAsJsonObject(path.get(i).getAsString());
+            }
         } else {
-            database.remove(key);
-            writeDatabase();
-            return okResponse();
+            if (!data.has(pos.getAsString())) {
+                return noSuchKeyResponse();
+            } else {
+                database.remove(pos.getAsString());
+            }
         }
+
+        writeDatabase();
+        return okResponse();
     }
 
     public void writeDatabase() {
@@ -89,6 +157,12 @@ public class JsonDatabase {
 
     private String getResponse(String value) {
         HashMap<String, String> response_entity = new HashMap<>();
+        response_entity.put("response", "OK");
+        response_entity.put("value", value);
+        return gson.toJson(response_entity);
+    }
+    private String getResponse(JsonObject value) {
+        HashMap<String, Object> response_entity = new HashMap<>();
         response_entity.put("response", "OK");
         response_entity.put("value", value);
         return gson.toJson(response_entity);

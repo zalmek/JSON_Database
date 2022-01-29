@@ -505,42 +505,10 @@ files:
 - name: src/server/JCommand_Json.java
   visible: true
   learner_created: true
-- name: src/Testing/Main.java
-  visible: true
-  learner_created: true
 feedback_link: https://hyperskill.org/learn/step/5495#comment
-status: Failed
+status: Solved
 feedback:
-  message: |-
-    Wrong answer in test #3
-
-    The JSON object shouldn&#39;t have the key &quot;reason&quot;
-
-    Full JSON:
-    {
-      &quot;reason&quot;: &quot;No such key&quot;,
-      &quot;response&quot;: &quot;ERROR&quot;
-    }
-
-    Please find below the output of your program during this failed test.
-
-    ---
-
-    Arguments for Main: -t set -k 1 -v &quot;Hello world!&quot;
-    Arguments for Main: -in setFile.json
-    Arguments for Main: -in getFile.json
-
-    Server started!
-    Client started!
-    &quot;Sent: {&quot;type&quot;:&quot;set&quot;,&quot;key&quot;:&quot;1&quot;,&quot;value&quot;:&quot;Hello world!&quot;}
-    {\&quot;type\&quot;:\&quot;set\&quot;,\&quot;key\&quot;:\&quot;1\&quot;,\&quot;value\&quot;:\&quot;Hello world!\&quot;}&quot;Received: {&quot;response&quot;:&quot;OK&quot;}
-    Client started!
-    Sent: {&quot;type&quot;:&quot;set&quot;,&quot;key&quot;:&quot;person&quot;,&quot;value&quot;:{&quot;name&quot;:&quot;Elon Musk&quot;,&quot;car&quot;:{&quot;model&quot;:&quot;Tesla Roadster&quot;,&quot;year&quot;:&quot;2018&quot;},&quot;rocket&quot;:{&quot;name&quot;:&quot;Falcon 9&quot;,&quot;launches&quot;:&quot;87&quot;}}}
-
-    &quot;{\&quot;type\&quot;:\&quot;set\&quot;,\&quot;key\&quot;:\&quot;person\&quot;,\&quot;value\&quot;:{\&quot;name\&quot;:\&quot;Elon Musk\&quot;,\&quot;car\&quot;:{\&quot;model\&quot;:\&quot;Tesla Roadster\&quot;,\&quot;year\&quot;:\&quot;2018\&quot;},\&quot;rocket\&quot;:{\&quot;name\&quot;:\&quot;Falcon 9\&quot;,\&quot;launches\&quot;:\&quot;87\&quot;}}}\r\n&quot;Received: {&quot;response&quot;:&quot;OK&quot;}
-    Client started!
-    Sent: {&quot;type&quot;:&quot;get&quot;,&quot;key&quot;:[&quot;person&quot;,&quot;name&quot;]}
-
-    &quot;{\&quot;type\&quot;:\&quot;get\&quot;,\&quot;key\&quot;:[\&quot;person\&quot;,\&quot;name\&quot;]}\r\n&quot;Received: {&quot;reason&quot;:&quot;No such key&quot;,&quot;response&quot;:&quot;ERROR&quot;}
-  time: Sat, 29 Jan 2022 09:35:40 UTC
+  message: Well done! You've finished the project. Select a new project on <a href="https://hyperskill.org/projects">JetBrains
+    Academy</a> to continue learning.
+  time: Sat, 29 Jan 2022 12:32:20 UTC
 record: -1
