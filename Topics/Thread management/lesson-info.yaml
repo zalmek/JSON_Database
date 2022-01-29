@@ -1,0 +1,6 @@
+content:
+- Theory
+- Summing with threads
+- Workers in programs
+- The max number of parallel threads
+- Ordering the execution of threads

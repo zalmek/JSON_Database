@@ -1,0 +1,18 @@
+content:
+- Throwing exceptions
+- Custom exceptions
+- The Collections Framework overview
+- The List interface
+- Comparable
+- Processing strings
+- Threads as objects
+- Custom threads
+- Thread management
+- The Set interface
+- The Map interface
+- Default methods
+- Anonymous classes
+- Thread synchronization
+- Lambda expressions
+- Functional interfaces
+- Executors
